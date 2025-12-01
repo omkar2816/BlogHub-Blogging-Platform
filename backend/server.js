@@ -85,6 +85,10 @@ app.get("/", (req, res) => {
   res.json({ message: "MERN Blog API is running" })
 })
 
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "OK", message: "Server is healthy" })
+})
+
 // Error handler
 app.use(errorHandler)
 

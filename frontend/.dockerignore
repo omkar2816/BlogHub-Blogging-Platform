@@ -1,0 +1,18 @@
+# Docker ignore file for frontend
+node_modules
+npm-debug.log
+.env.local
+.env.development
+.env.test
+coverage
+.nyc_output
+.git
+.gitignore
+README.md
+Dockerfile
+.dockerignore
+dist/temp/*
+src/**/*.test.js
+src/**/*.test.jsx
+src/**/*.test.ts
+src/**/*.test.tsx

@@ -1,0 +1,14 @@
+# Docker ignore file for backend
+node_modules
+npm-debug.log
+.env.local
+.env.development
+.env.test
+coverage
+.nyc_output
+.git
+.gitignore
+README.md
+Dockerfile
+.dockerignore
+uploads/temp/*
