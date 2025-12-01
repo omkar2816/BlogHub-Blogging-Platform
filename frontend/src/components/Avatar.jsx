@@ -49,7 +49,7 @@ const Avatar = ({
   const avatarUrl = hasAvatar 
     ? (avatarSource.startsWith('http') 
         ? avatarSource // Full URL from backend
-        : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/uploads/images/${avatarSource}`) // Filename only
+        : `${import.meta.env.VITE_BASE_URL || 'http://localhost:5000'}/uploads/images/${avatarSource}`) // Filename only
     : null
 
   const handleImageError = () => {
