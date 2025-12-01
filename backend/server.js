@@ -30,26 +30,19 @@ const corsOptions = {
     const allowedOrigins = [
       'http://localhost:3000',
       'http://localhost:5173',
-      'http://localhost:5174',
-      'http://localhost:5175',
-      'http://localhost:5176',
-      'http://localhost:5177',
-      'http://localhost:5178',
-      'http://localhost:5179',
-      'http://127.0.0.1:3000',
-      'http://127.0.0.1:5173',
-      'http://127.0.0.1:5174',
-      'http://127.0.0.1:5175',
-      'http://127.0.0.1:5176',
-      'http://127.0.0.1:5177',
-      'http://127.0.0.1:5178',
-      'http://127.0.0.1:5179'
+      'http://127.0.0.1:5179',
+      'https://bloghub-blogging-platform.netlify.app'
     ];
     
     // Allow requests with no origin (like mobile apps or curl requests)
     if (!origin) return callback(null, true);
     
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    // Check if origin is in allowed list or is a Netlify domain
+    const isAllowed = allowedOrigins.includes(origin) || 
+                     origin.endsWith('.netlify.app') ||
+                     origin.endsWith('.netlify.com');
+    
+    if (isAllowed) {
       console.log('✅ CORS allowed origin:', origin);
       callback(null, true);
     } else {
