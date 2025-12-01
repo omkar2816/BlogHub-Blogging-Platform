@@ -159,7 +159,7 @@ export const uploadImageFile = async (file, token = null) => {
   console.log('Uploading file:', file.name)
   console.log('Token present:', !!authToken)
 
-  const response = await fetch('http://localhost:5000/api/upload/image', {
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/upload/image`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${authToken}`
