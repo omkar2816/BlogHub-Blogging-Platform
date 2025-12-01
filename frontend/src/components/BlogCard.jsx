@@ -7,7 +7,7 @@ import { updateUserBookmarks } from "../store/slices/authSlice"
 import { updateBlogLikes } from "../store/slices/blogSlice"
 import blogService from "../services/blogService"
 import toast from "react-hot-toast"
-import { isValidImageUrl, convertGooglePhotosUrl } from "../utils/imageUtils"
+import { isValidImageUrl, convertGooglePhotosUrl, fixImageUrl } from "../utils/imageUtils"
 import Avatar from "./Avatar"
 
 function BlogCard({ blog, searchTerms = [], showRelevanceScore = false, user = null }) {
@@ -129,7 +129,7 @@ function BlogCard({ blog, searchTerms = [], showRelevanceScore = false, user = n
 
   // Convert the image URL if it's a Google Photos or Drive sharing link
   const getImageUrl = (url) => {
-    return convertGooglePhotosUrl(url)
+    return fixImageUrl(convertGooglePhotosUrl(url))
   }
 
   return (

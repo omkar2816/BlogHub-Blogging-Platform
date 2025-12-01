@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { fixImageUrl } from '../utils/imageUtils'
 
 const Avatar = ({ 
   user, 
@@ -48,7 +49,7 @@ const Avatar = ({
   // Handle both full URLs and filenames
   const avatarUrl = hasAvatar 
     ? (avatarSource.startsWith('http') 
-        ? avatarSource // Full URL from backend
+        ? fixImageUrl(avatarSource) // Fix localhost URLs
         : `${import.meta.env.VITE_BASE_URL || 'http://localhost:5000'}/uploads/images/${avatarSource}`) // Filename only
     : null
 

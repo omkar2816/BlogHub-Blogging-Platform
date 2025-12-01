@@ -8,7 +8,7 @@ import toast from "react-hot-toast"
 import { FiHeart, FiEdit, FiTrash2, FiUser, FiCalendar, FiClock, FiEye, FiShare2, FiCheck, FiX } from "react-icons/fi"
 import ShareButton from "../components/ShareButton"
 import BookmarkButton from "../components/BookmarkButton"
-import { isValidImageUrl, convertGooglePhotosUrl } from "../utils/imageUtils"
+import { isValidImageUrl, convertGooglePhotosUrl, fixImageUrl } from "../utils/imageUtils"
 
 function BlogDetails() {
   const { id } = useParams()
@@ -193,8 +193,8 @@ function BlogDetails() {
           {/* Hero Image */}
           {blog.image && isValidImageUrl(blog.image) && !imageError ? (
             <div className="relative h-96 overflow-hidden">
-              <img 
-                src={convertGooglePhotosUrl(blog.image)} 
+              <img
+                src={fixImageUrl(convertGooglePhotosUrl(blog.image))}
                 alt={blog.title} 
                 className="w-full h-full object-cover"
                 crossOrigin="anonymous"

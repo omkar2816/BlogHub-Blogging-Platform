@@ -184,3 +184,20 @@ export const uploadImageFile = async (file, token = null) => {
   console.log('Upload success:', result)
   return result.imageUrl
 }
+
+/**
+ * Fixes image URLs by replacing localhost with deployed backend URL
+ * @param {string} url - The image URL that might contain localhost
+ * @returns {string} - Fixed image URL
+ */
+export const fixImageUrl = (url) => {
+  if (!url) return url
+  
+  // Replace localhost URLs with deployed backend URL
+  if (url.includes('localhost:5000') || url.includes('127.0.0.1:5000')) {
+    const baseUrl = import.meta.env.VITE_BASE_URL || 'http://localhost:5000'
+    return url.replace(/https?:\/\/(localhost|127\.0\.0\.1):5000/, baseUrl)
+  }
+  
+  return url
+}
