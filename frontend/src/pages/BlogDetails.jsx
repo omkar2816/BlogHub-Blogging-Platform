@@ -31,6 +31,18 @@ function BlogDetails() {
     dispatch(getBlog(id))
   }, [dispatch, id])
 
+  // Track view when blog loads successfully
+  useEffect(() => {
+    if (blog && !isLoading) {
+      // Only track view once per session to avoid inflating numbers
+      const viewedBlogs = JSON.parse(sessionStorage.getItem('viewedBlogs') || '[]')
+      if (!viewedBlogs.includes(id)) {
+        blogService.incrementView(id).catch(console.error)
+        sessionStorage.setItem('viewedBlogs', JSON.stringify([...viewedBlogs, id]))
+      }
+    }
+  }, [blog, id, isLoading])
+
   useEffect(() => {
     if (blog) {
       setLikesCount(blog.likes?.length || 0)
@@ -188,7 +200,7 @@ function BlogDetails() {
       {/* Background Pattern */}
       <div className="fixed inset-0 pattern-dots opacity-10 pointer-events-none"></div>
       
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="relative max-w-4xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-8">
         <article className="card-modern overflow-hidden">
           {/* Hero Image */}
           {blog.image && isValidImageUrl(blog.image) && !imageError ? (
@@ -216,11 +228,11 @@ function BlogDetails() {
             </div>
           ) : null}
 
-          <div className="p-8 space-y-6">
+          <div className="p-4 sm:p-6 lg:p-8 space-y-6">
             {/* Header */}
             <div className="space-y-4">
               {/* Meta Info */}
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div className="flex items-center flex-wrap gap-2">
                   {blog.category && typeof blog.category === 'string' && (
                     <span className="bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 px-3 py-1 rounded-full text-sm font-medium border border-primary-200 dark:border-primary-700">
@@ -240,70 +252,74 @@ function BlogDetails() {
                 </div>
 
                 {isAuthor && (
-                  <div className="flex space-x-3">
+                  <div className="flex space-x-3 flex-shrink-0">
                     <Link
                       to={`/edit/${blog._id}`}
-                      className="btn-secondary flex items-center space-x-2 text-sm px-4 py-2"
+                      className="btn-secondary flex items-center space-x-2 text-sm px-3 py-2"
                     >
                       <FiEdit className="w-4 h-4" />
-                      <span>Edit</span>
+                      <span className="hidden sm:inline">Edit</span>
                     </Link>
                     <button 
                       onClick={handleDelete} 
-                      className="btn-ghost text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center space-x-2 text-sm px-4 py-2"
+                      className="btn-ghost text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 flex items-center space-x-2 text-sm px-3 py-2"
                     >
                       <FiTrash2 className="w-4 h-4" />
-                      <span>Delete</span>
+                      <span className="hidden sm:inline">Delete</span>
                     </button>
                   </div>
                 )}
               </div>
 
               {/* Title */}
-              <h1 className="text-4xl lg:text-5xl font-display font-bold text-theme-text leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-display font-bold text-theme-text leading-tight break-words">
                 {blog.title}
               </h1>
 
               {/* Author and Meta Info */}
-              <div className="flex items-center justify-between flex-wrap gap-4 py-6 border-t border-b border-theme-border">
-                <div className="flex items-center space-x-6">
-                  <Link 
-                    to={`/profile/${blog.author?._id}`} 
-                    className="flex items-center space-x-3 hover:text-primary-500 transition-colors duration-200 group"
-                  >
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white font-medium group-hover:scale-105 transition-transform duration-200">
-                      {blog.author?.avatar ? (
-                        <img 
-                          src={blog.author.avatar} 
-                          alt={blog.author.name} 
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
-                      ) : (
-                        blog.author?.name?.charAt(0).toUpperCase()
-                      )}
-                    </div>
-                    <div className="flex flex-col">
-                      <span className="font-medium text-theme-text">{blog.author?.name}</span>
-                      <span className="text-sm text-theme-text-secondary">Author</span>
-                    </div>
-                  </Link>
+              <div className="space-y-4 py-6 border-t border-b border-theme-border">
+                {/* Author and Date Info */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                    <Link 
+                      to={`/profile/${blog.author?._id}`} 
+                      className="flex items-center space-x-3 hover:text-primary-500 transition-colors duration-200 group"
+                    >
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary-500 to-secondary-500 flex items-center justify-center text-white font-medium group-hover:scale-105 transition-transform duration-200">
+                        {blog.author?.avatar ? (
+                          <img 
+                            src={blog.author.avatar} 
+                            alt={blog.author.name} 
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                        ) : (
+                          blog.author?.name?.charAt(0).toUpperCase()
+                        )}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-medium text-theme-text">{blog.author?.name}</span>
+                        <span className="text-sm text-theme-text-secondary">Author</span>
+                      </div>
+                    </Link>
 
-                  <div className="flex items-center space-x-4 text-theme-text-secondary text-sm">
-                    <div className="flex items-center space-x-2">
-                      <FiCalendar className="w-4 h-4" />
-                      <span>{formatDate(blog.createdAt)}</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <FiClock className="w-4 h-4" />
-                      <span>{getReadingTime(blog.content)} min read</span>
+                    <div className="flex items-center flex-wrap gap-4 text-theme-text-secondary text-sm ml-0 sm:ml-4">
+                      <div className="flex items-center space-x-2">
+                        <FiCalendar className="w-4 h-4" />
+                        <span className="whitespace-nowrap">{formatDate(blog.createdAt)}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <FiClock className="w-4 h-4" />
+                        <span className="whitespace-nowrap">{getReadingTime(blog.content)} min read</span>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-4">
+                {/* Action Buttons */}
+                <div className="flex items-center flex-wrap gap-2 sm:gap-4 justify-center sm:justify-start">
                   <button
                     onClick={handleLike}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-200 ${
+                    className={`flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-xl transition-all duration-200 ${
                       liked 
                         ? "bg-red-50 dark:bg-red-900/20 text-red-500 hover:bg-red-100 dark:hover:bg-red-900/30" 
                         : "bg-theme-bg-secondary text-theme-text-secondary hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
@@ -328,9 +344,9 @@ function BlogDetails() {
             <div className="blog-content space-y-6" dangerouslySetInnerHTML={{ __html: blog.content }} />
           </div>
         </article>        {/* Comments Section */}
-        <div className="mt-8 card-modern p-8 space-y-6">
-          <h2 className="text-2xl font-display font-bold text-theme-text flex items-center space-x-2">
-            <FiUser className="w-6 h-6" />
+        <div className="mt-4 sm:mt-8 card-modern p-4 sm:p-6 lg:p-8 space-y-6">
+          <h2 className="text-xl sm:text-2xl font-display font-bold text-theme-text flex items-center space-x-2">
+            <FiUser className="w-5 h-5 sm:w-6 sm:h-6" />
             <span>Comments ({comments.length})</span>
           </h2>
 

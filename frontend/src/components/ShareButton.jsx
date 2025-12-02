@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { FiShare2, FiCopy, FiTwitter, FiFacebook, FiLinkedin, FiCheck } from "react-icons/fi"
+import { FaXTwitter } from "react-icons/fa6";
 import toast from "react-hot-toast"
 
 function ShareButton({ blog, className = "" }) {
@@ -91,7 +92,7 @@ function ShareButton({ blog, className = "" }) {
                   onClick={handleTwitterShare}
                   className="w-full flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
                 >
-                  <FiTwitter className="w-5 h-5 text-blue-400" />
+                  <FaXTwitter className="w-5 h-5 text-blue-400" />
                   <span className="text-sm text-gray-700 dark:text-gray-300">Share on Twitter</span>
                 </button>
 

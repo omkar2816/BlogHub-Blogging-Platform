@@ -112,7 +112,9 @@ function Home() {
               
               <div className="text-center space-y-2">
                 <div className="text-3xl lg:text-4xl font-display font-bold gradient-text">
-                  {Math.floor(stats.totalReads / 1000)}K+
+                  {stats.totalReads > 1000 
+                    ? `${Math.floor(stats.totalReads / 1000)}K+` 
+                    : stats.totalReads.toLocaleString()}
                 </div>
                 <div className="flex items-center justify-center text-theme-text-secondary">
                   <FiTrendingUp className="w-4 h-4 mr-2" />

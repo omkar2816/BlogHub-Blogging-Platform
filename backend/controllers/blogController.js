@@ -157,6 +157,24 @@ export const getBlog = asyncHandler(async (req, res) => {
   }
 })
 
+// @desc    Increment blog view count
+// @route   PUT /api/blogs/:id/view
+// @access  Public
+export const incrementView = asyncHandler(async (req, res) => {
+  const blog = await Blog.findById(req.params.id)
+
+  if (!blog) {
+    res.status(404)
+    throw new Error("Blog not found")
+  }
+
+  // Increment view count
+  blog.viewsCount = (blog.viewsCount || 0) + 1
+  await blog.save()
+
+  res.json({ viewsCount: blog.viewsCount })
+})
+
 // @desc    Create new blog
 // @route   POST /api/blogs
 // @access  Private

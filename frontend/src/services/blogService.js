@@ -45,6 +45,11 @@ const getBookmarkedBlogs = async () => {
   return response.data
 }
 
+const incrementView = async (id) => {
+  const response = await api.put(`/blogs/${id}/view`)
+  return response.data
+}
+
 const blogService = {
   getBlogs,
   getBlog,
@@ -55,6 +60,7 @@ const blogService = {
   addComment,
   toggleBookmark,
   getBookmarkedBlogs,
+  incrementView,
 }
 
 export default blogService

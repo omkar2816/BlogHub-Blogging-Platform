@@ -67,6 +67,10 @@ const blogSchema = mongoose.Schema(
         ref: "User",
       },
     ],
+    viewsCount: {
+      type: Number,
+      default: 0,
+    },
     comments: [commentSchema],
   },
   {
