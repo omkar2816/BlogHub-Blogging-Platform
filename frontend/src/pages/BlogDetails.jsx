@@ -362,7 +362,7 @@ function BlogDetails() {
           ) : (
             <div className="text-center py-8 space-y-4">
               <p className="text-theme-text-secondary">Join the conversation! Sign in to leave a comment.</p>
-              <Link to="/login" className="btn-primary inline-flex">
+              <Link to="/login" className="btn-primary inline-flex px-[15px] py-[10px]">
                 Sign In to Comment
               </Link>
             </div>
